@@ -3,11 +3,11 @@ Proceso ProyectoN1
 	//Saludos,Ofrecer, precio original.
 	
 	definir PRECIO_ORIGINAL Como Real;
-	PRECIO_ORIGINAL<- 20000;
+	PRECIO_ORIGINAL<- 100;
 	definir CUPON_DESCUENTO Como Real;
 	CUPON_DESCUENTO<-0.10;
 	definir IVA Como Real;
-	IVA<-1.19;
+	IVA<-1.12;
 	Definir descuento_cantidad Como Real;
 	descuento_cantidad<-0.05;
 	
@@ -33,13 +33,14 @@ Proceso ProyectoN1
 		precio_con_descuento <- precio_original * (CUPON_DESCUENTO);
 		Definir aux_descuento Como Real;
 		aux_descuento<-precio_original-precio_con_descuento;
-		Escribir "Tu precio con descuento sería: ",aux_descuento;
+		Escribir "TU PRECIO CON DESCUENTO SERÍA ",aux_descuento;
 		Definir precio_despues_iva Como Real;
 		precio_despues_iva<-aux_descuento* (IVA);
 		Escribir " El valor con impuesto inlcuido es: ", precio_despues_iva;
 	SiNo
 		
 		si op1=2 Entonces
+			CUPON_DESCUENTO<-0;
 			Escribir "Tu Precio sin descuento es: ", precio_original;
 			Definir precio_despues_iva Como Real;
 			precio_despues_iva<-precio_original*IVA;
@@ -49,37 +50,65 @@ Proceso ProyectoN1
 	FinSi
 	
 	
-	precio_con_descuento<- precio_original - (cupon_descuento);
 	Escribir "¿Cuántos deseas llevar?";
-	definir cantidad Como Entero;
+	Definir cantidad Como Entero;
+	Definir descuento_producto Como Real;
+	Definir total_sin_iva Como Real;
+	Definir total_con_iva Como Real;
+	
 	Leer cantidad;
-	si cantidad > 1 Entonces
-		descuento_cantidad<- (precio_despues_iva-(precio_despues_iva * descuento_cantidad));
-		Escribir "El descuento por comprar mas de 1 unidad es de: ", descuento_cantidad;
+	si cantidad < 2 Entonces
+		descuento_producto<-precio_original*CUPON_DESCUENTO;
+		total_sin_iva<-1 * (precio_original - descuento_producto);
+		total_con_iva<-total_sin_iva * IVA;
+		Escribir "El TOTAL POR LA COMPRA DE 1 UNIDAD CON IMPUESTOS ES DE : ", total_con_iva;
 	SiNo
-		descuento_cantidad<- (precio_despues_iva);
-		Escribir "El precio por la compra de 1 unidad es: ",descuento_cantidad;
+		descuento_producto<-precio_original*CUPON_DESCUENTO;
+		total_sin_iva<-1 * (precio_original - descuento_producto);
+		total_con_iva<-total_sin_iva * IVA;
+		Definir descuento_dos Como Real;
+		descuento_dos<-0.95;
+		Definir nuevo_precio_iva Como Real;
+		nuevo_precio_iva<-total_con_iva * descuento_dos;
+		total_con_iva<-nuevo_precio_iva*cantidad;
+		Escribir "El NUEVO PRECIO POR LA COMPRA DE MAS DE UNA PAR DE ZAPATOS ES DE : ", nuevo_precio_iva;
+		Escribir "EL COSTO TOTAL POR LA CANTIDAD DE PARES DE ZAPATOS MAS IVA ES DE : ", total_con_iva;
 	FinSi
 	
 	// costos de envío
 	
 	Definir COSTO_ENVIO Como Real;
-	COSTO_ENVIO<-1000;
+	COSTO_ENVIO<-10;
 	Definir peso_kg Como Real;
-	peso_kg<-0;
-	Definir VALORX3KG Como Real;
-	VALORX3KG<-200;
-	Escribir "Ingrese el Peso en KG del producto: ";
+	peso_kg<-3;
+	Escribir "INGRESE EL PESO DEL PRODUCTO EN KG PARA GESTIONAR EL ENVÍO: ";
 	Leer peso_kg;
 	Definir valor_total_envio Como Real;
-	valor_total_envio<-(COSTO_ENVIO + trunc(peso_kg/3 * 200));
-	Escribir "El costo total del envío es: ", valor_total_envio;
+	valor_total_envio<-(COSTO_ENVIO + (peso_kg * 2));
+	Escribir "EL COSTO DEL ENVÍO POR LA CANTIDAD DE KG ES: ", trunc(valor_total_envio);
 	
 	// Costo FinAlgoritmo
 	
 	Definir Total_a_pagar Como Real;
-	Total_a_pagar<-descuento_cantidad + (valor_total_envio);
-	Escribir "El Total a pagar con envío es de: ", Total_a_pagar;
+	Total_a_pagar<-total_con_iva + (valor_total_envio);
+	Escribir "El TOTAL DE LA COMPRA CON ENVÍO ES: ", Total_a_pagar;
+	Escribir " ";
+	Escribir "---------------------------------------------------";
+	Escribir "DETALLE FACTURA : ";
+	Escribir  "PRECIO UNIDAD :", precio_original;
+	SI op1=1 Entonces
+		Escribir"CUPON DE DESCUENTO : ", CUPON_DESCUENTO * 100, "%";
+		Escribir "TU PRECIO CON DESCUENTO SERÍA ",aux_descuento;
+	FinSi
+	Escribir "IMPUESTOS (IVA) : 12 % ";
+	Si cantidad <2
+		Entonces
+		Escribir "DESCUENTO POR CANTIDAD : 0 ";
+	SiNo
+		Escribir  "DESCUENTO POR CANTIDAD : 5 %";
+	FinSi
+	Escribir "COSTO TOTAL POR LOS PRODUCTOS :", total_con_iva;
+	Escribir "COSTO TOTAL POR ENVIO :", trunc(valor_total_envio);
+	Escribir "TOTAL A PAGAR POR LA COMPRA :", total_con_iva + trunc(valor_total_envio);
 	
-	
-	FinProceso
+FinAlgoritmo
